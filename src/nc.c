@@ -60,9 +60,9 @@ struct cmdline_options {
 static struct option long_options[] = {
     { "help",           no_argument,        NULL,   'h' },
     { "version",        no_argument,        NULL,   'V' },
-    { "test-conf",      no_argument,        NULL,   't' },
     { "daemonize",      no_argument,        NULL,   'd' },
-    { "describe-stats", no_argument,        NULL,   'D' },
+    { "describe-stats",	no_argument,        NULL,   'D' },
+	{ "test-conf",      required_argument,  NULL,   't' },
     { "verbose",        required_argument,  NULL,   'v' },
     { "output",         required_argument,  NULL,   'o' },
     { "conf-file",      required_argument,  NULL,   'c' },
@@ -74,7 +74,7 @@ static struct option long_options[] = {
     { NULL,             0,                  NULL,    0  }
 };
 
-static char short_options[] = "hVtdDv:o:c:s:i:a:p:m:";
+static char short_options[] = "hVdDt:v:o:c:s:i:a:p:m:";
 
 static rstatus_t
 nc_daemonize(int dump_core)
@@ -332,10 +332,6 @@ nc_get_options(int argc, char **argv, struct cmdline_options *cmdopts, struct in
             cmdopts->show_version = 1;
             break;
 
-        case 't':
-            cmdopts->test_conf = 1;
-            break;
-
         case 'd':
             cmdopts->daemonize = 1;
             break;
@@ -344,6 +340,11 @@ nc_get_options(int argc, char **argv, struct cmdline_options *cmdopts, struct in
             cmdopts->describe_stats = 1;
             cmdopts->show_version = 1;
             break;
+		
+		case 't':
+			cmdopts->test_conf = 1;
+			nci->conf_filename = optarg;
+			break;
 
         case 'v':
             value = nc_atoi(optarg, strlen(optarg));
